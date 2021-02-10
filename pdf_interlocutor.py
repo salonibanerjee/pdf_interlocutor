@@ -9,20 +9,32 @@ import os
 from gtts import gTTS   #to save as mp3
 import json        #to display choice of language dict
 
-print(json.dumps(googletrans.LANGUAGES, indent = 4))
 trex = Translator()
 pdf = FPDF()   
-myLang="en"
-#msg="Select a language abbreviation from above : "
-#myLang=str(input(msg))
+Tk().withdraw()
 
-Tk().withdraw()                             #Select Japanese PDF
 filelocation = askopenfilename()
 pdfReader = PyPDF2.PdfFileReader(filelocation)
 pages = pdfReader.numPages                  #total no. of pages
 
 f = open("Saloni_new_translation.txt","w")
 f.close()
+trial=2
+print(json.dumps(googletrans.LANGUAGES, indent = 4))
+myLang=""
+while(True):
+    myLang=input('Enter your language code : ')   #myLang="en"
+    if(myLang in googletrans.LANGUAGES):
+        x = googletrans.LANGUAGES.get(myLang)
+        print('OK. You selected ',x)
+        break
+    else:
+        trial=trial-1
+        if(trial==0):
+            print('Invalid Code...Translating to English')
+            myLang="en"
+            break
+        print("Invalid Code. Retry with 'en'")
 
 for page in range(pages):                   #Translate each foreign language pages and store in .txt
     from_page = pdfReader.getPage(page)
